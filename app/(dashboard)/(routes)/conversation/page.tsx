@@ -6,6 +6,7 @@ import { BotAvatar } from "@/components/bot-avatar";
 import { UserAvatar } from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-hot-toast";
 import { Empty } from "@/components/ui/empty";
 import { MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -18,9 +19,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ChatCompletionRequestMessage } from "openai";
 import { useState } from "react";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const ConversationPage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +45,11 @@ const ConversationPage = () => {
       
       form.reset();
     } catch (error: any) {
-      console.log(error)
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong.");
+      }
     } finally {
       router.refresh();
     }
