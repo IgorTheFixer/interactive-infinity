@@ -24,7 +24,7 @@ const MobileSidebar = ({
   if (!isMounted) {
     return null;
   }
-
+  console.log(apiLimitCount)
   return(
     <Sheet>
       <SheetTrigger>
