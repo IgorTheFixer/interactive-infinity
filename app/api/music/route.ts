@@ -48,7 +48,6 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.log('[MUSIC_ERROR]', error);
-    console.log('Prompt is required')
     return new NextResponse("Internal Error", { status: 500 });
   }
 };
